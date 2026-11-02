@@ -1,0 +1,13 @@
+# 화이트리스트: 기본 전부 제외, 지침·스크립트만 추적
+/*
+!/.gitignore
+!/agents/
+*.bak_*
+!/skills/
+/skills/synced/
+!/hooks/
+!/security.md
+!/accessibility.md
+!/web-vulnerability.md
+!/statusline-command.sh
+!/home/
