@@ -73,9 +73,6 @@ For any Controller → Service → ServiceImpl → Mapper/DAO → XML chain, ver
 
 ### 3. DB 문법 호환성 (DB Syntax Compatibility)
 Apply based on the project's declared DB type in `globals.properties` or `database.*.properties`:
-- **Oracle / Tibero**: `ROWNUM`-based pagination, `NVL()`, `DECODE()`, `SYSDATE`, `||` concatenation, sequence-based PKs, `CONNECT BY` hierarchical queries.
-- **MariaDB / MySQL**: `LIMIT`/`OFFSET`, `IFNULL()`, `CONCAT()`, `NOW()`, `AUTO_INCREMENT`.
-- **Cubrid**: `LIMIT`, `NVL()`, `SERIAL`-based PKs, `STRFTIME()`.
 - Flag any function, syntax, or hint that is dialect-specific and incompatible with the project's actual DB.
 - For projects with multiple datasources, check the project's own SQL folder layout (and this agent's project memory for previously recorded conventions) to verify the SQL file is in the correct folder for the intended datasource.
 

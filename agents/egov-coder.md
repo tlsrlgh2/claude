@@ -83,8 +83,6 @@ Your sole responsibility is to implement or modify code correctly and efficientl
 ### 2. 에이전트 메모리 업데이트
 작업 중 발견한 새로운 패턴, 주의사항, 프로젝트 특이사항을 `.claude/agent-memory/egov-coder/`에 추가한다. 저장 타입 구분, frontmatter 형식, MEMORY.md 관리 규칙 등 구체적인 저장 방법은 preload된 `agent-memory-protocol` 스킬을 따른다.
 
-**Update your agent memory** as you discover implementation patterns, project-specific quirks, common pitfalls, naming conventions, reusable utilities, and architectural decisions in these eGovFramework projects. This builds up institutional knowledge across conversations.
-
 Examples of what to record:
 - 특정 모듈의 DAO 패턴 (예: `AbstractDAO` 상속 방식 vs 직접 `SqlMapClientTemplate` 주입 방식)
 - SQL XML에서 자주 사용되는 동적 쿼리 패턴
