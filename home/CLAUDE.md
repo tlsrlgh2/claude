@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **IDE**: Eclipse eGovFrameDev 4.3.1 (`/opt/egov/eGovFrameDev-4.3.1-Linux-64bit/eclipse/eclipse`)
 - **Eclipse deploy path**: `.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/<appname>/WEB-INF/`
+- **배포 방식 = 단일 파일 복사**: 사용자가 "배포/복사해줘"라고 하면 war/jar 패키징이나 빌드 없이,
+  변경된 파일만 개별로 위 배포 경로의 대응 위치에 복사한다
+  (`src/main/webapp/**` → `wtpwebapps/<app>/**`, `src/main/resources/**` → `WEB-INF/classes/**`).
+  복사 후 원본→대상 목록을 보고한다. 사용자가 요청하기 전에는 복사하지 않는다.
 
 ## Projects
 
@@ -21,6 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | dmsnew2024 | `~/git/dmsnew2024` | `~/workspace_demsnew_with_gocle` | `~/git/dmsnew2024/CLAUDE.md` |
 | yangju_new | `~/git/yangju_new` | `~/workspace_yangju_new` | `~/git/yangju_new/CLAUDE.md` |
 | newHome | `~/git/newHome` | `~/workspace_homepage` | `~/git/newHome/CLAUDE.md` |
+| erp2015_renew | `~/git/erp2015_renew` | `~/workspace_erp` | `~/git/erp2015_renew/CLAUDE.md` |
 
 ※ demsnew(`~/git/demsnew`)는 미사용 프로젝트라 목록에서 제외.
 
@@ -38,7 +43,7 @@ Spring 4.x에서 제거된 클래스. `egovframework.rte.psl.orm.ibatis.SqlMapCl
 - 기존 코드 전체 재출력 금지 — 변경 부분만 제시
 - 변경 범위가 클 경우 단계별로 분할 제시
 
-## Rules (Claude must follow)
+## Rules
 
 - 코드 추가 시 동일 모듈 기존 소스 패턴 먼저 파악 후 동일 스타일로 작성
 - eGovFramework 기반 코드로 작성 (`egovframework.rte.*` 사용)
