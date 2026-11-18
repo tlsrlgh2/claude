@@ -63,9 +63,10 @@ Fill the **"[B] verifier 결과"** section (create it if absent) and update the 
 - Namespace and SQL ID references in Java (`sqlSession.selectList("namespace.id", ...)`) must match the XML exactly.
 - New `<sql>` fragments referenced with `<include refid="...">` must exist in the same mapper file or an imported one.
 
-**Spring MVC Layered Architecture (Oracle Procedure call pattern)**
+**Spring MVC Layered Architecture**
 For any Controller → Service → ServiceImpl → Mapper/DAO → XML chain, verify:
-- Controller does not contain business logic; it only validates input, calls service, and returns ModelAndView or ResponseBody.
+- New features: Controller does not contain business logic; it only validates input, calls service, and returns ModelAndView or ResponseBody.
+- Edits to existing legacy controllers that already hold logic in the controller (e.g. decompiled sources): keeping that same pattern is not a layer violation. Do not fail B for it; list the location under "D에게 전달할 검토 포인트" instead.
 - Service interface declares the method; ServiceImpl implements it with `@Service` / `@Autowired` (or eGov `EgovAbstractServiceImpl` pattern).
 - DAO/Mapper interface method signature matches the XML SQL ID.
 - `@Transactional` annotations are placed on ServiceImpl methods, not on Controller or DAO.
@@ -177,7 +178,7 @@ And append one line to the history log:
 ## Decision Rules
 
 - **Pass (✅ 통과)**: All five domains have no blocking issues. Minor style notes go into "D에게 전달할 검토 포인트" as informational items.
-- **Fail (❌ 실패)**: Any one of the following: functional logic does not match intent; existing JSP name/id attributes broken; MyBatis ResultMap or dynamic query structure damaged; layer architecture violated; DB syntax incompatible with project DB; compile/syntax error found; a Find Security Bugs pattern from Domain 5 matched in changed code.
+- **Fail (❌ 실패)**: Any one of the following: functional logic does not match intent; existing JSP name/id/class attributes broken; MyBatis ResultMap or dynamic query structure damaged; layer architecture violated; DB syntax incompatible with project DB; compile/syntax error found; a Find Security Bugs pattern from Domain 5 matched in changed code.
 
 ---
 

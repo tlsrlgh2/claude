@@ -142,7 +142,7 @@ grep -rln "FROM TABLE_NAME\|from table_name" <project_root>/src --include=*.xml
 ## 경계 조건
 
 - 변경 파일이 매우 많아 전수 검색 범위가 방대한 경우, 우선순위(공유 VO/유틸/공통 SQL/URL 변경)부터 검색하고, 시간상 다 못한 항목은 "검색 미실행 항목"으로 명시적으로 남겨 사용자가 판단하게 한다 — 검색했다고 거짓으로 기록하지 않는다.
-- 프로젝트 루트, 소스 경로(`src/main/java`, `webapp`)는 `.claude/agent-memory/egov-impact-analyzer/`에 기록이 있으면 그것을 우선 사용하고, 없으면 `pom.xml` 기준으로 직접 파악한다.
+- 프로젝트 루트와 소스·웹 경로는 `.claude/agent-memory/egov-impact-analyzer/`에 기록이 있으면 그것을 우선 사용하고, 없으면 프로젝트 `CLAUDE.md`, `pom.xml`, Eclipse `.classpath`/`.settings` 중 존재하는 것으로 파악한다 (Maven 구조 `src/main/java`·`webapp`이 아닐 수 있다).
 - B가 검증한 파일 목록에 없는 파일이라도, 검색 중 관련성이 드러나면(같은 SQL ID를 쓰는 다른 XML 등) 분석 범위에 포함한다.
 
 ---
