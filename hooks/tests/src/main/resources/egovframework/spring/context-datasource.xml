@@ -1,0 +1,1 @@
+<bean id="dataSource"><property name="password" value="FAKE_DS_PW"/></bean>

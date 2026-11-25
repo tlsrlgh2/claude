@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <!-- 1. 같은 줄 name/value -->
+  <bean id="ds1" class="org.apache.commons.dbcp2.BasicDataSource">
+    <property name="driverClassName" value="KEEP_DRIVER"/>
+    <property name="url" value="jdbc:tibero:thin:@10.1.2.3:8629:KEEP_SID"/>
+    <property name="username" value="KEEP_USER"/>
+    <property name="password" value="FAKE_SECRET_1"/>
+  </bean>
+  <!-- 2. value가 name보다 앞 -->
+  <property value="FAKE_SECRET_2" name="password"/>
+  <!-- 3. 다음 줄 <value> -->
+  <property name="password">
+    <value>FAKE_SECRET_3</value>
+  </property>
+  <!-- 4. 여러 줄에 걸친 <value> -->
+  <property name="dbPassword">
+    <value>
+      FAKE_SECRET_4
+    </value>
+  </property>
+  <property name="afterMultiline" value="KEEP_AFTER"/>
+  <!-- 5. entry key / prop key -->
+  <entry key="db.password" value="FAKE_SECRET_5"/>
+  <prop key="hibernate.connection.password">FAKE_SECRET_6</prop>
+  <!-- 6. 요소 이름 자체 -->
+  <password>FAKE_SECRET_7</password>
+  <jdbc.pwd>FAKE_SECRET_8</jdbc.pwd>
+  <!-- 7. 속성 이름 (Tomcat Resource, 대소문자) -->
+  <Resource name="jdbc/KEEP_RES" username="KEEP_USER2" PASSWORD='FAKE_SECRET_9' url="jdbc:oracle:thin:@KEEP_HOST:1521:x"/>
+  <!-- 8. constructor-arg, secret/credential -->
+  <constructor-arg name="clientSecret" value="FAKE_SECRET_10"/>
+  <property name="awsCredential"><value>FAKE_SECRET_11</value></property>
+  <!-- 9. 키워드 없는 다음 항목은 그대로 -->
+  <property name="maxActive" value="KEEP_MAX"/>
+  <property name="validationQuery"><value>KEEP_QUERY</value></property>
+</beans>
