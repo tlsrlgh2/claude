@@ -1,0 +1,67 @@
+{
+  "cleanupPeriodDays": 7,
+  "permissions": {
+    "deny": [
+      "Bash(isql *)",
+      "Bash(mongo *)",
+      "Bash(mongosh *)",
+      "Bash(mysql *)",
+      "Bash(mysqladmin *)",
+      "Bash(mysqldump *)",
+      "Bash(mysqlsh *)",
+      "Bash(osql *)",
+      "Bash(pg_dump *)",
+      "Bash(psql *)",
+      "Bash(redis-cli *)",
+      "Bash(sqlcmd *)",
+      "Bash(sqlldr *)",
+      "Bash(sqlplus *)",
+      "Bash(tbsql *)"
+    ],
+    "ask": [
+      "WebFetch",
+      "WebSearch",
+      "Agent"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Bash|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/ghsin/.claude/hooks/mask-secrets.sh",
+            "timeout": 15,
+            "statusMessage": "민감정보 마스킹 검사 중..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/ghsin/.claude/hooks/block-db-access.sh",
+            "timeout": 10,
+            "statusMessage": "DB 직접 접속 차단 검사 중..."
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash /home/ghsin/.claude/statusline-command.sh"
+  },
+  "language": "korean",
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "tui": "fullscreen",
+  "theme": "dark"
+}
