@@ -26,14 +26,16 @@ mask_file() {
     -e 's/(([Pp]assword|[Pp]asswd|[Pp]wd|[Ss]ecret)[[:space:]]*=[[:space:]]*")[^"]*(")/\1[MASKED]\3/g' \
     -e "s/(([Pp]assword|[Pp]asswd|[Pp]wd|[Ss]ecret)[[:space:]]*=[[:space:]]*')[^']*(')/\1[MASKED]\3/g" \
     -e 's/([0-9]{1,3}\.){3}[0-9]{1,3}/[MASKED_IP]/g' \
-    "$1"
+    "$1" \
+  | python3 -I "$(dirname "$0")/mask-xml.py"   # XML 형태(<property name="password" value=...> 등) 보완
 }
 
 case "$tool" in
   Read)
     fp=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty')
     if [[ -n "$fp" && -f "$fp" ]] && printf '%s' "$fp" | grep -qiE "$FILE_RE"; then
-      masked=$(mask_file "$fp")
+      # 마스킹 실패 시 훅이 오류 종료하면 Read가 원본으로 실행됨(fail-open) → 내용 없이 차단
+      masked=$(mask_file "$fp") || deny "민감 설정 파일 마스킹에 실패해 내용을 표시하지 않습니다. 사용자에게 필요한 값을 직접 확인해 달라고 요청하세요."
       deny "[민감 설정 파일 — 원본 Read는 차단되었고, 아래는 비밀번호·IP가 로컬에서 마스킹된 내용입니다]
 $masked"
     fi
