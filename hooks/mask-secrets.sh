@@ -54,6 +54,13 @@ $masked"
     mode=$(printf '%s' "$input" | jq -r '.tool_input.output_mode // "files_with_matches"')
     [[ "$mode" == "files_with_matches" ]] && exit 0
 
+    # type이 민감 파일을 포함할 수 없는 언어면 통과 (허용 목록 — 목록 밖은 아래 검사)
+    # ※ java는 ripgrep 정의상 *.properties 포함, xml은 context*.xml 포함 → 넣지 말 것
+    typ=$(printf '%s' "$input" | jq -r '.tool_input.type // empty')
+    case "$typ" in
+      js|ts|css|html|sql|py|sh|md) exit 0 ;;
+    esac
+
     hcwd=$(printf '%s' "$input" | jq -r '.cwd // empty')
     root=${gp:-${hcwd:-.}}
     [[ "$root" != /* && -n "$hcwd" ]] && root="$hcwd/$root"
@@ -73,6 +80,8 @@ $masked"
 
     gopt=(-q -P); [[ "$icase" == "true" ]] && gopt+=(-i)
     while IFS= read -r f; do
+      # 바깥 훅 timeout(settings.json 30초)에 걸리면 fail-open이 되므로 그 전에 스스로 차단
+      (( SECONDS > 20 )) && deny "민감 파일 검사 시간 초과. $GUIDE"
       # glob 필터: 중괄호 등 해석 불확실한 glob은 매칭으로 간주(보수적)
       if [[ -n "$glob" && "$glob" != *[{}]* ]]; then
         rel=${f#"$root"/}

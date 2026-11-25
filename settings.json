@@ -33,7 +33,7 @@
           {
             "type": "command",
             "command": "/home/ghsin/.claude/hooks/mask-secrets.sh",
-            "timeout": 15,
+            "timeout": 30,
             "statusMessage": "민감정보 마스킹 검사 중..."
           }
         ]
