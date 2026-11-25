@@ -3,9 +3,10 @@
 # 대상: *.properties(전체), context.xml, context-datasource.xml, .env*
 # - Read  : 원본 차단 후 마스킹된 내용을 대신 전달 (비밀번호·IP는 로컬 sed로 제거됨)
 # - Bash  : 민감 파일명이 포함된 명령 차단 (cat 등 우회 방지)
+#           + 폴더·와일드카드 대상 읽기 명령이 민감 파일 내용을 출력할 수 있으면 차단 (scan-bash-read.py)
 # - Grep  : 민감 파일 직접 대상 검색 차단 + 폴더 검색(content/count 모드)에서
 #           범위 내 민감 파일이 검색어에 걸리면 차단 (판정 불가 시 차단, fail-closed)
-#           ※ Linux 기본 설정에서는 Grep 도구가 비활성이라 Bash grep으로 대체됨 — Bash 쪽은 별도 대응 필요
+#           ※ Linux 기본 설정에서는 Grep 도구가 비활성이라 검색은 대부분 Bash grep으로 들어온다
 set -euo pipefail
 
 input=$(cat)
@@ -41,6 +42,14 @@ $masked"
     cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
     if printf '%s' "$cmd" | grep -qiE "$CMD_RE"; then
       deny "민감 설정 파일(*.properties/context.xml/.env)은 Bash로 접근할 수 없습니다. Read 도구를 사용하세요 — 비밀번호·IP가 마스킹된 내용이 제공됩니다."
+    fi
+
+    # 폴더·와일드카드 대상 읽기 명령(grep -r, rg, cat *, find -exec, xargs 등) 검사 → scan-bash-read.py
+    # 읽기 명령 단어가 없으면 생략(성능). 검사기 실패·시간 초과는 차단(fail-closed)
+    if printf '%s' "$cmd" | grep -qE 'grep|rg|ag|ack|find|xargs|cat|tac|head|tail|less|more|nl|od|xxd|hexdump|strings|sed|awk|cut|sort|uniq|paste|diff|cmp|base64|column|fold|fmt|jq|iconv|vi|view|nano|bat'; then
+      reason=$(printf '%s' "$input" | timeout 25 python3 -I "$(dirname "$0")/scan-bash-read.py" 2>/dev/null) \
+        || reason="민감 파일 검사기 실행 실패(fail-closed). 명령 범위를 좁혀 다시 시도하세요."
+      [[ -n "$reason" ]] && deny "$reason"
     fi
     ;;
   Grep)
