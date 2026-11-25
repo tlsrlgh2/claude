@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Bash|PowerShell|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"C:/Users/<사용자>/.claude/hooks/windows/mask_secrets.py\"",
+            "timeout": 30,
+            "statusMessage": "민감정보 마스킹 검사 중..."
+          }
+        ]
+      }
+    ]
+  }
+}
